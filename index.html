@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Will You Be My Valentine?</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #ff758c, #ff7eb3);
+      font-family: "Comic Sans MS", cursive;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .container {
+      background: white;
+      padding: 25px;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      width: 90%;
+      max-width: 350px;
+      z-index: 10;
+    }
+
+    img {
+      width: 220px;
+      border-radius: 15px;
+      margin-bottom: 10px;
+    }
+
+    h1 { color: #ff2e63; }
+    h2 { color: #444; }
+
+    p {
+      color: #ff2e63;
+      margin-top: 10px;
+      min-height: 24px;
+    }
+
+    .buttons {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    button {
+      padding: 12px 25px;
+      font-size: 15px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+    }
+
+    .yes { background: #ff2e63; color: white; }
+    .no { background: #ccc; color: #333; }
+    .surprise { background: #ff9ff3; color: white; margin-top: 20px; }
+
+    .hidden { display: none; }
+
+    .love-msg {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #ff2e63;
+      animation: fadeIn 0.8s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .floating-photo {
+      position: absolute;
+      border-radius: 15px;
+      animation: floatUp linear infinite;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(-120vh) scale(1.2); opacity: 0; }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- 🎶 Background Music -->
+<audio autoplay loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<!-- 💌 Question Page -->
+<div class="container" id="questionPage">
+  <img src="image1.jpg" alt="love">
+  <h1>Hey Cutie 💖</h1>
+  <h2>Will you be my Valentine? 💌</h2>
+
+  <div class="buttons">
+    <button class="yes" onclick="showYes()">Yes 💕</button>
+    <button class="no" onmouseover="changeNoText()">No 😢</button>
+  </div>
+
+  <p id="msg"></p>
+</div>
+
+<!-- 💕 Yes Page -->
+<div class="container hidden" id="yesPage">
+  <img src="img2.jpg" alt="happy">
+  <h1>Yayyyy 😍</h1>
+  <h2>You just made my heart melt 💘</h2>
+
+  <div id="loveMessages"></div>
+  <button id="surpriseBtn" class="surprise hidden" onclick="triggerSurprise()">Click for Surprise 🎉</button>
+</div>
+
+<script>
+  // ❌ No button messages
+  const noMessages = [
+    "No 😢",
+    "Are you sure? 🥺",
+    "Think again 💕",
+    "Don't break my heart 💔",
+    "Last chance 😭",
+    "Please say yes 🥹"
+  ];
+  let noIndex = 0;
+
+  function changeNoText() {
+    const noBtn = document.querySelector(".no");
+    const msg = document.getElementById("msg");
+    noIndex = (noIndex + 1) % noMessages.length;
+    noBtn.innerText = noMessages[noIndex];
+    msg.innerText = noMessages[noIndex];
+  }
+
+  // ❤️ Yes messages
+  const yesMessages = [
+    "I promise to make you smile everyday 😊",
+    "You’re my favorite person in this whole world🌍❤️",
+    "Every moment with you feels magical ✨",
+    "Thank you for choosing me🥹💕",
+    "I love you more than words can ever explain💖"
+  ];
+
+  function showYes() {
+    document.getElementById("questionPage").classList.add("hidden");
+    document.getElementById("yesPage").classList.remove("hidden");
+
+    const container = document.getElementById("loveMessages");
+    let i = 0;
+
+    const interval = setInterval(() => {
+      if (i < yesMessages.length) {
+        const p = document.createElement("p");
+        p.className = "love-msg";
+        p.innerText = yesMessages[i];
+        container.appendChild(p);
+        i++;
+      } else {
+        clearInterval(interval);
+        document.getElementById("surpriseBtn").classList.remove("hidden");
+      }
+    }, 1200);
+  }
+
+  // 🎉 Surprise: floating big photos randomly
+  function triggerSurprise() {
+    const photos = ["photo1.jpg", "photo2.jpg"]; // Replace with your 2 photos
+    const container = document.body;
+
+    for (let i = 0; i < 20; i++) {  // Fewer big photos
+      const img = document.createElement("img");
+      img.src = photos[Math.floor(Math.random() * photos.length)];
+      img.className = "floating-photo";
+      img.style.left = Math.random() * (window.innerWidth - 250) + "px"; // Stay inside screen
+      img.style.width = (150 + Math.random() * 100) + "px";  // Big photos
+      img.style.height = "auto";  // Keep aspect ratio
+      img.style.animationDuration = (7 + Math.random() * 5) + "s"; // Slower
+
+      container.appendChild(img);
+
+      setTimeout(() => {
+        img.remove();
+      }, 12000); // Longer life for big photos
+    }
+  }
+</script>
+
+</body>
+</html>
